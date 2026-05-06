@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Quiz App</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: linear-gradient(to right, #667eea, #764ba2);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        color: white;
+    }
+
+    .quiz-box {
+        background: #222;
+        padding: 20px;
+        border-radius: 10px;
+        width: 350px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+
+    button {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        padding: 10px;
+        border: none;
+        background: #667eea;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background: #5a67d8;
+    }
+
+    #result {
+        font-size: 20px;
+        margin-top: 15px;
+    }
+</style>
+
+</head>
+<body>
+
+<div class="quiz-box">
+    <h2 id="question">Question here</h2>
+    <div id="answers"></div>
+    <p id="progress"></p>
+    <div id="result"></div>
+    <button onclick="restartQuiz()">Restart</button>
+</div>
+
+<script>
+const quiz = [
+    {
+        question: "What does HTML stand for?",
+        answers: ["Hyper Text Markup Language", "High Text Machine Language", "Hyper Tool Multi Language", "None"],
+        correct: 0
+    },
+    {
+        question: "Which language is used for styling?",
+        answers: ["HTML", "Python", "CSS", "Java"],
+        correct: 2
+    },
+    {
+        question: "Which is a JavaScript framework?",
+        answers: ["React", "Django", "Flask", "Laravel"],
+        correct: 0
+    },
+    {
+        question: "Which tag is used for JS?",
+        answers: ["<js>", "<script>", "<javascript>", "<code>"],
+        correct: 1
+    }
+];
+
+let current = 0;
+let score = 0;
+
+function loadQuestion() {
+    let q = quiz[current];
+    document.getElementById("question").innerText = q.question;
+    document.getElementById("progress").innerText = `Question ${current + 1} of ${quiz.length}`;
+
+    let answersDiv = document.getElementById("answers");
+    answersDiv.innerHTML = "";
+
+    q.answers.forEach((ans, index) => {
+        let btn = document.createElement("button");
+        btn.innerText = ans;
+        btn.onclick = () => checkAnswer(index);
+        answersDiv.appendChild(btn);
+    });
+}
+
+function checkAnswer(index) {
+    if (index === quiz[current].correct) {
+        score++;
+    }
+
+    current++;
+
+    if (current < quiz.length) {
+        loadQuestion();
+    } else {
+        document.getElementById("question").innerText = "Quiz Finished!";
+        document.getElementById("answers").innerHTML = "";
+        document.getElementById("progress").innerText = "";
+        document.getElementById("result").innerText = `Your Score: ${score}/${quiz.length}`;
+    }
+}
+
+function restartQuiz() {
+    current = 0;
+    score = 0;
+    document.getElementById("result").innerText = "";
+    loadQuestion();
+}
+
+loadQuestion();
+</script>
+
+</body>
+</html>
